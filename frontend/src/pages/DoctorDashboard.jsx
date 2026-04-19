@@ -14,7 +14,7 @@ const DoctorDashboard = ({ user }) => {
 
   const fetchAppointments = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/appointments/me', { withCredentials: true });
+      const res = await axios.get('/api/appointments/me', { withCredentials: true });
       setAppointments(res.data);
     } catch (err) {
       console.error(err);
@@ -23,9 +23,9 @@ const DoctorDashboard = ({ user }) => {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/auth/me', { withCredentials: true });
+      const res = await axios.get('/api/auth/me', { withCredentials: true });
       if (res.data.doctorId) {
-         const docRes = await axios.get(`http://localhost:5000/api/doctors/${res.data.doctorId}`);
+         const docRes = await axios.get(`/api/doctors/${res.data.doctorId}`);
          setProfile({
            specialization: docRes.data.specialization || '',
            availableDays: docRes.data.availableDays || [],
@@ -39,7 +39,7 @@ const DoctorDashboard = ({ user }) => {
 
   const updateStatus = async (id, status) => {
     try {
-      await axios.put(`http://localhost:5000/api/appointments/${id}/status`, { status }, { withCredentials: true });
+      await axios.put(`/api/appointments/${id}/status`, { status }, { withCredentials: true });
       fetchAppointments();
     } catch (err) {
       alert(err.response?.data?.message || 'Error updating status');
@@ -54,7 +54,7 @@ const DoctorDashboard = ({ user }) => {
         availableDays: typeof profile.availableDays === 'string' ? profile.availableDays.split(',').map(s=>s.trim()) : profile.availableDays,
         slots: typeof profile.slots === 'string' ? profile.slots.split(',').map(s=>s.trim()) : profile.slots,
       };
-      await axios.put('http://localhost:5000/api/doctors/profile', updatedProfile, { withCredentials: true });
+      await axios.put('/api/doctors/profile', updatedProfile, { withCredentials: true });
       setIsEditing(false);
       fetchProfile();
       alert('Profile updated');

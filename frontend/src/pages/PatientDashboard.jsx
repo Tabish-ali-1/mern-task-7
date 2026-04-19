@@ -15,7 +15,7 @@ const PatientDashboard = ({ user }) => {
 
   const fetchDoctors = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/doctors');
+      const res = await axios.get('/api/doctors');
       setDoctors(res.data);
     } catch (err) {
       console.error(err);
@@ -24,7 +24,7 @@ const PatientDashboard = ({ user }) => {
 
   const fetchAppointments = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/appointments/me', { withCredentials: true });
+      const res = await axios.get('/api/appointments/me', { withCredentials: true });
       setAppointments(res.data);
     } catch (err) {
       console.error(err);
@@ -34,7 +34,7 @@ const PatientDashboard = ({ user }) => {
   const handleBooking = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/appointments/book', bookingForm, { withCredentials: true });
+      await axios.post('/api/appointments/book', bookingForm, { withCredentials: true });
       setBookingForm(null);
       setError('');
       fetchAppointments();
