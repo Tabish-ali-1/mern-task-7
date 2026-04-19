@@ -1,0 +1,61 @@
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+
+const Signup = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'patient' });
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('http://localhost:5000/api/auth/register', formData);
+      navigate('/login');
+    } catch (err) {
+      setError(err.response?.data?.message || err.response?.data?.error || 'Registration failed');
+    }
+  };
+
+  return (
+    <div className="flex justify-center items-center h-[calc(100vh-80px)]">
+      <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-lg border border-gray-100">
+        <h2 className="text-3xl font-bold text-center text-[hsl(var(--primary))] mb-6">Create Account</h2>
+        {error && <div className="bg-red-50 text-red-500 p-3 rounded mb-4 text-sm">{error}</div>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <input type="text" name="name" onChange={handleChange} required className="w-full px-4 py-2 border rounded-md focus:ring-[hsl(var(--primary))] focus:border-[hsl(var(--primary))] transition-colors" placeholder="John Doe" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" name="email" onChange={handleChange} required className="w-full px-4 py-2 border rounded-md focus:ring-[hsl(var(--primary))] focus:border-[hsl(var(--primary))] transition-colors" placeholder="john@example.com" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input type="password" name="password" onChange={handleChange} required className="w-full px-4 py-2 border rounded-md focus:ring-[hsl(var(--primary))] focus:border-[hsl(var(--primary))] transition-colors" placeholder="••••••••" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+            <select name="role" onChange={handleChange} className="w-full px-4 py-2 border rounded-md focus:ring-[hsl(var(--primary))] focus:border-[hsl(var(--primary))] transition-colors">
+              <option value="patient">Patient</option>
+              <option value="doctor">Doctor</option>
+            </select>
+          </div>
+          <button type="submit" className="w-full bg-[hsl(var(--primary))] hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors mt-2">
+            Sign Up
+          </button>
+        </form>
+        <p className="mt-6 text-center text-sm text-gray-600">
+          Already have an account? <Link to="/login" className="text-[hsl(var(--primary))] font-medium hover:underline">Log in</Link>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Signup;
